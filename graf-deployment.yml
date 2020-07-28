@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graf-dep
+  labels:
+    app: grafana
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+       app: grafana
+  template:
+    metadata:
+      name: graf-dep
+      labels:
+        app: grafana
+    spec:
+      volumes:
+        - name: grafana-storage
+          persistentVolumeClaim:
+            claimName: graf-pvc
+      containers:
+        - name: grafana
+          image: bhavanimeesala/grafana:v1
+          imagePullPolicy: IfNotPresent
+          volumeMounts: 
+           - mountPath: "/var/lib/grafana"
+             name: grafana-storage
+         
+      restartPolicy: Always
